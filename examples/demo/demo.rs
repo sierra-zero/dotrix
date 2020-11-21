@@ -14,7 +14,7 @@ fn main() {
         .with_system(System::from(startup).with(RunLevel::Startup))
         .with_system(System::from(camera_control))
         .with_service(Assets::new())
-        .with_service(Camera::new(10.0, 3.14 / 2.0, 4.0))
+        .with_service(Camera::new(10.0, 3.14 / 2.0, 3.14 / 4.0))
         .with_service(World::new())
         .run();
 
