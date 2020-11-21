@@ -32,6 +32,9 @@ pub mod systems {
     pub use crate::{
         renderer::{
             static_renderer,
+        },
+        camera::{
+            camera_control,
         }
     };
 }

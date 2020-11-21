@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = [
   "Elias Kartashov <elias@lowenware.com>",
   "Štěpán Wünsch <sw@lowenware.com>",
+  "Nikita Zemtsov <z-nik@ya.ru>",
 ]
 edition = "2018"
 description = "3D Game Engine"

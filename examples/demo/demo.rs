@@ -4,7 +4,7 @@ use dotrix::{
     components::{ Light, StaticModel },
     ecs::{ Mut, RunLevel, System },
     services::{ Assets, Camera, World },
-    systems::{ static_renderer },
+    systems::{ static_renderer, camera_control },
 };
 
 fn main() {
@@ -12,7 +12,7 @@ fn main() {
     Dotrix::application("Input Example")
         .with_system(System::from(static_renderer).with(RunLevel::Render))
         .with_system(System::from(startup).with(RunLevel::Startup))
-        .with_system(System::from(fly_around))
+        .with_system(System::from(camera_control))
         .with_service(Assets::new())
         .with_service(Camera::new(10.0, 3.14 / 2.0, 4.0))
         .with_service(World::new())
@@ -33,13 +33,4 @@ fn startup(mut world: Mut<World>, mut assets: Mut<Assets>) {
     ]);
 
     world.spawn(Some((Light::white([10.0, 2.0, 4.0]),)));
-}
-
-fn fly_around(mut camera: Mut<Camera>) {
-    let target = cgmath::Point3::new(0.0, 0.0, 0.0);
-    let distance = camera.distance();
-    let angle = camera.angle() + 0.002;
-    let height = camera.height();
-
-    camera.set(target, distance, angle, height);
 }

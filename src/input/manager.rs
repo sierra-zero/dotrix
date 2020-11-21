@@ -111,7 +111,7 @@ impl InputManager {
             }
         }
 
-        self.scroll_delta = 0.0;
+        //self.scroll_delta = 0.0;
     }
 
     /// Handle mouse event from winit
@@ -124,7 +124,7 @@ impl InputManager {
     /// Handle mouse wheel event from winit
     pub fn handle_mouse_wheel_event(&mut self, _device_id: DeviceId, delta: MouseScrollDelta, _phase: TouchPhase) {
         match delta {
-            MouseScrollDelta::LineDelta(_x, y) => {self.scroll_delta = y; println!("scroll {:?}", y)}, // TODO: clamp between -1 and 1?
+            MouseScrollDelta::LineDelta(_x, y) => {self.scroll_delta += y; println!("scroll {:?}", self.scroll_delta)}, // TODO: clamp between -1 and 1?
             _ => {println!("unmapped {:?}", delta)}
         }
     }

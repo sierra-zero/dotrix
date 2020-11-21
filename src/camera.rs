@@ -1,9 +1,45 @@
 
+use crate::{
+    ecs::{ Mut, Const },
+    input::*,
+};
+
 pub struct Camera {
     distance: f32,
     angle: f32,
     height: f32,
     view: cgmath::Matrix4<f32>,
+}
+
+pub fn camera_control(mut camera: Mut<Camera>, input: Const<InputManager>) {
+    
+    let mut delta_angle = 0.0;
+    let mut delta_height = 0.0;
+
+    if input.get_button(Action::MoveLeft){
+        delta_angle += 0.006; 
+    }
+
+    if input.get_button(Action::MoveRight){
+        delta_angle -= 0.006; 
+    }
+
+    if input.get_button(Action::MoveForward){
+        delta_height += 0.1; 
+    }
+
+    if input.get_button(Action::MoveBackward){
+        delta_height -= 0.1; 
+    }
+    
+    let target = cgmath::Point3::new(0.0, 0.0, 0.0);
+    let distance = 10.0 + input.get_scroll();
+    
+    
+    let angle = camera.angle() + delta_angle;
+    let height = camera.height() + delta_height;
+
+    camera.set(target, distance, angle, height);
 }
 
 impl Camera {
