@@ -1,6 +1,7 @@
 mod application;
 pub mod assets;
 mod camera;
+mod frame;
 pub mod ecs;
 mod input;
 mod renderer;
@@ -23,6 +24,7 @@ pub mod services {
     pub use crate::{
         assets::Assets,
         camera::Camera,
+        frame::Frame,
         renderer::Renderer,
         world::World,
     };

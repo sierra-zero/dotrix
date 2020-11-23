@@ -10,8 +10,8 @@ use dotrix::{
     Dotrix,
     assets::{ Mesh, Texture },
     components::{ Light, StaticModel },
-    ecs::{ Mut, RunLevel, System },
-    services::{ Assets, Camera, World },
+    ecs::{ Const, Mut, RunLevel, System },
+    services::{ Assets, Camera, Frame, World },
     systems::{ static_renderer },
 };
 
@@ -41,10 +41,11 @@ fn startup(mut world: Mut<World>, mut assets: Mut<Assets>) {
     world.spawn(Some((Light::white([200.0, 100.0, 200.0]),)));
 }
 
-fn fly_around(mut camera: Mut<Camera>) {
+fn fly_around(frame: Const<Frame>, mut camera: Mut<Camera>) {
+    let speed = std::f32::consts::PI / 3.0;
     let target = cgmath::Point3::new(0.0, 50.0, 0.0);
     let distance = camera.distance();
-    let angle = camera.angle() + 0.002;
+    let angle = camera.angle() + speed * frame.delta().as_secs_f32();
     let height = camera.height();
 
     camera.set(target, distance, angle, height);
