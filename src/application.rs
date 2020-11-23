@@ -13,7 +13,7 @@ use winit::{
 use crate::{
     assets::Assets,
     ecs::{System},
-    input::{InputConfig, InputManager},
+    input::Input,
     renderer::Renderer,
     scheduler::Scheduler,
 };
@@ -88,19 +88,13 @@ fn run(
 
     scheduler.run_startup(&mut services);
 
-    services.add(InputManager::new());
-    let input_config = InputConfig::default();
-    services.get_mut::<InputManager>().initialize(&input_config);
-
-    // println!("{}", serde_json::to_string_pretty(&input_manager.create_config()).unwrap());
-
     event_loop.run(move |event, _, control_flow| {
         // TODO: other possibilities?
         // *control_flow = ControlFlow::Poll;
         *control_flow = ControlFlow::WaitUntil(Instant::now() + Duration::from_millis(10));
 
-        services.get_mut::<InputManager>().update(); // TODO: can winit event loop runs more than once per frame?
-
+        // TODO: services.get should return Option
+        services.get_mut::<Input>().handle_event(&event);
         scheduler.run_standard(&mut services);
         services.get_mut::<Assets>().fetch();
 
@@ -125,22 +119,6 @@ fn run(
                 scheduler.run_render(&mut services);
                 services.get_mut::<Renderer>().finalize();
             }
-            Event::WindowEvent {
-                event: WindowEvent::CloseRequested,
-                ..
-            } => *control_flow = ControlFlow::Exit,
-            Event::WindowEvent {
-                event: WindowEvent::KeyboardInput{device_id, input, is_synthetic},
-                ..
-            } => services.get_mut::<InputManager>().handle_keyboard_event(device_id, input, is_synthetic),
-            Event::WindowEvent {
-                event: WindowEvent::MouseInput{device_id, state, button, ..},
-                ..
-            } => services.get_mut::<InputManager>().handle_mouse_event(device_id, state, button),
-            Event::WindowEvent {
-                event: WindowEvent::MouseWheel{device_id, delta, phase, ..},
-                ..
-            } => services.get_mut::<InputManager>().handle_mouse_wheel_event(device_id, delta, phase),
             _ => {}
         }
     });
